@@ -1,5 +1,6 @@
 const initialState = {
     layout: true,
+
   };
   
   export const reducer = (state = initialState, action) => {

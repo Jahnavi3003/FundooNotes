@@ -13,17 +13,19 @@ import {AuthContext} from '../navigation/AuthProvider';
 import {fetchNote} from '../services/FirebaseNoteServices';
 import {FlatList} from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
-
+import {useUid} from '../hooks/useUid'
 
 
 const Home = ({navigation}) => {
-  const {user} = useContext(AuthContext);
+//  const {user} = useContext(AuthContext);
+  const uid = useUid();
   const [noteData, setNoteData] = useState([]);
   const [pinnedNotes, setPinnedNotes] = useState([]);
   const layout= useSelector((state)=>state.layout)  
 
   const getData = async () => {
-    const notes = await fetchNote(user.uid);
+   // const notes = await fetchNote(user.uid);
+    const notes = await fetchNote(uid);
     let pinnData = [];
     let otherData = [];
     notes.forEach(data => {

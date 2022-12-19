@@ -5,7 +5,6 @@ import NoteCard from '../components/NoteCard';
 import {AuthContext} from '../navigation/AuthProvider';
 import {COLOR} from '../utility/Theme';
 import {fetchNote} from '../services/FirebaseNoteServices';
-//import {trashNote} from '../services/FirebaseNoteServices';
 import {FlatList} from 'react-native-gesture-handler';
 
 const Trash = ({menuPress, navigation}) => {

@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Modal,
-  Pressable,
   TouchableOpacity,
   ViewBase,
 } from 'react-native';
@@ -14,9 +13,12 @@ import Icon2 from 'react-native-vector-icons/Entypo';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {deleteNote} from '../services/FirebaseNoteServices';
 import {COLOR} from '../utility/Theme';
+import {useTime} from '../hooks/useTime';
 
-const NotesBottomBar = ({deleteData, setDeleteData}) => {
+const NotesBottomBar = ({navigation, deleteData, setDeleteData}) => {
+  const time = useTime();
   const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View style={styles.view}>
       <TouchableOpacity style={styles.icon}>
@@ -27,7 +29,7 @@ const NotesBottomBar = ({deleteData, setDeleteData}) => {
         <Icon1 name="color-palette-outline" size={20} color="white" />
       </TouchableOpacity>
       <View>
-        <Text style={styles.text}>Edited</Text>
+        <Text style={styles.text}>Edited {time}</Text>
       </View>
       <TouchableOpacity
         style={styles.icon2}
@@ -67,7 +69,7 @@ const NotesBottomBar = ({deleteData, setDeleteData}) => {
                 <Text style={styles.text1}> Send </Text>
               </Icon>
             </TouchableOpacity>
-            <TouchableOpacity onPress={{}}>
+            <TouchableOpacity onPress={() => navigation.navigate('LabelInModal')}>
               <Icon3
                 style={styles.icons}
                 name="label-outline"

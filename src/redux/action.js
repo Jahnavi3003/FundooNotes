@@ -3,4 +3,5 @@ export const changeLayout = () => {
       type: 'CHANGELAYOUT',
     };
   };
+
   

@@ -4,6 +4,7 @@ import AuthStack from './AuthStack';
 import {NavigationContainer} from '@react-navigation/native';
 import AppStack from './AppStack';
 import {AuthContext} from './AuthProvider';
+import SplashScreen from '../screens/SplashScreen';
 
 const Routes = () => {
   const {user, setUser} = useContext(AuthContext);
@@ -11,7 +12,7 @@ const Routes = () => {
 
   const onAuthStateChanged = user => {
     setUser(user);
-    setInitializing(false);
+    setTimeout(()=> {setInitializing(false)},2000);
   };
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const Routes = () => {
   }, []);
 
   if (initializing) {
-    return null;
+    return <SplashScreen />
   }
 
   return (

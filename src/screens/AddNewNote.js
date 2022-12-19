@@ -90,7 +90,7 @@ const AddNewNote = ({navigation, route}) => {
         </View>
       </View>
       <View>
-        <NotesBottomBar deleteData={deleteData} setDeleteData={setDeleteData} />
+        <NotesBottomBar deleteData={deleteData} setDeleteData={setDeleteData} navigation={navigation} />
       </View>
     </View>
   );
