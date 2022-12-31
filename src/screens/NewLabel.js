@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
-  View,
+  SafeAreaView,
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -11,24 +11,28 @@ import {COLOR} from '../utility/Theme';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/AntDesign';
-import LabelName from '../components/LabelName';
+import LabelCard from '../components/LabelCard';
 import {addLabel, fetchLabel} from '../services/FirebaseLabelServices';
 import {useUid} from '../hooks/useUid';
+import { useSelector, useDispatch } from 'react-redux';
 
 const NewLabel = ({navigation}) => {
-  const [labelName, setLabelName] = useState([]);
+  const [labelName, setLabelName] = useState('');
   const [check, setCheck] = useState(true);
   const [cross, setCross] = useState(true);
   const [borderColor, setBorderColor] = useState(true);
+  const dispatch= useDispatch();
+  const labels = useSelector((state) => state.labels);
 
-  const [labelData, setLabelData] = useState([]);
+ // const [labelData, setLabelData] = useState([]);
 
   const uid = useUid();
 
-  const getData = async () => {
+  const getData = useCallback (async () => {
     let result = await fetchLabel(uid);
-    setLabelData(result);
-  };
+    dispatch({type: 'GETLABELDATA', payload: result});
+   // setLabelData(result);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -42,7 +46,8 @@ const NewLabel = ({navigation}) => {
     setCheck(!check);
     setBorderColor(!borderColor);
     await addLabel(labelName, uid);
-    await getData();
+    getData();
+    setLabelName('');
   };
 
   const onLabelAbsent = () => {
@@ -50,19 +55,19 @@ const NewLabel = ({navigation}) => {
     setCheck(!check);
     setBorderColor(!borderColor);
   };
-
+// console.log('$$$$$$$$$',labelData)
   return (
-    <View style={styles.view}>
-      <View style={styles.top}>
+    <SafeAreaView style={styles.view}>
+      <SafeAreaView style={styles.top}>
         <TouchableOpacity
           style={styles.icon}
           onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={20} color="white" />
         </TouchableOpacity>
         <Text style={styles.text}> Edit labels</Text>
-      </View>
+      </SafeAreaView>
 
-      <View
+      <SafeAreaView
         style={[
           styles.box,
           {
@@ -87,31 +92,31 @@ const NewLabel = ({navigation}) => {
           }>
           <Icon2
             style={styles.icon2}
-            name={check ? 'check' : null}
+            name={cross ? 'check' : null}
             size={20}
             color="white"
           />
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
 
-      <View>
+      <SafeAreaView>
         <FlatList
-          data={labelData}
+         // data={labelData}
+          data={labels}
           renderItem={({item, index}) => (
             <TouchableOpacity onPress={{}}>
-              <LabelName
-                item = {item}
+              <LabelCard
+                {...item}
               />
             </TouchableOpacity>
           )}
-          keyExtractor={item => item.labelNameId}
-          key={item => item.labelNameId}
+          keyExtractor={item => item.labelNameid}
+          key={item => item.labelNameid}
         />
-      </View>
-    </View>
+      </SafeAreaView>
+    </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   view: {
     flex: 1,

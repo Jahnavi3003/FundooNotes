@@ -1,5 +1,6 @@
 const initialState = {
     layout: true,
+    labels: [],
 
   };
   
@@ -8,6 +9,11 @@ const initialState = {
       case 'CHANGELAYOUT':
         return {
           layout: !state.layout
+        };
+
+      case 'GETLABELDATA':
+        return {
+            labels: [...action.payload]
         };
 
       default:

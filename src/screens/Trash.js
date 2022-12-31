@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {SafeAreaView,View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import TrashTopBar from '../components/TrashTopBar';
 import NoteCard from '../components/NoteCard';
 import {AuthContext} from '../navigation/AuthProvider';
@@ -32,7 +32,7 @@ const Trash = ({menuPress, navigation}) => {
   }, []);
 
   return (
-    <View style={styles.view}>
+    <SafeAreaView style={styles.view}>
       <TrashTopBar
         menuPress={() => {
           navigation.openDrawer();
@@ -51,7 +51,7 @@ const Trash = ({menuPress, navigation}) => {
           key={item => item.noteId}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

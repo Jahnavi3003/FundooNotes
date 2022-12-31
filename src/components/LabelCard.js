@@ -3,28 +3,30 @@ import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native'
 import { COLOR } from '../utility/Theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {useUid} from '../hooks/useUid';
-import { updateLabel } from '../services/FirebaseLabelServices';
+import { updateLabel, deleteLabel } from '../services/FirebaseLabelServices';
 
-const LabelName = ({item}) => {
-  
-  const [labelName, setLabelName] = useState(item.labelName);
-  const [pencil, setPencil] = useState(true);
-  const [label, setLabel] = useState(true);
+const LabelCard = (props) => {
+  const [value, setValue] = useState(props.labelName);
+  const [trash, setTrash] = useState(false);
   const [borderColor, setBorderColor] = useState(false);
 
   const uid = useUid();
 
-  const onLabelPress = () => {
-    setLabel(!label);
-    setPencil(!pencil);
+  const onDeletePress = async () => {
+    await deleteLabel(uid,props.labelNameid)
+    setTrash(!trash);
     setBorderColor(!borderColor);
   }
 
-  const onPencilPress = async() => {
-    setLabel(!label);
-    setPencil(!pencil);
+  const onLabelPress = () => {
+    setTrash(!trash);
     setBorderColor(!borderColor);
-    await updateLabel(uid,labelName)
+  }
+
+  const onCheckPress = async () => {
+    await updateLabel(props.labelName,uid,props.labelNameid);
+    setTrash(!trash);
+    setBorderColor(!borderColor); 
   }
 
   return (
@@ -36,7 +38,7 @@ const LabelName = ({item}) => {
           : COLOR.BACKGROUND_COLOR_DG,
       },
     ]}>
-         {label? 
+         {!trash? 
          (<Icon
           name= "label-outline"
           size={20} onPress={() =>onLabelPress()}
@@ -44,27 +46,27 @@ const LabelName = ({item}) => {
          />) :
          (<Icon
           name= "delete-outline"
-          size={20} onPress={() =>onLabelPress()}
+          size={20} onPress={() =>onDeletePress()}
             style={styles.icon1} color="white"
          />)}
 
          <TextInput 
-         onPressIn={()=>onLabelPress()}
+         onPressIn={()=> onLabelPress()}
          style={styles.text}
-         value={labelName}
-         onChangeText={text =>setLabelName(text)}
+         value={value}
+         onChangeText={text =>setValue(text)}
          placeholderTextColor={'white'}
          />
         
-        {pencil? 
+        {!trash? 
          (<Icon
           name= "pencil"
-          size={20} onPress={() =>onPencilPress()}
+          size={20} onPress={() => {setTrash(!trash)}}
             style={styles.icon2} color="white"
          />) :
          (<Icon
           name= "check"
-          size={20} onPress={() =>onLabelPress()}
+          size={20} onPress={() =>onCheckPress()}
             style={styles.icon2} color="white"
          />)}
 
@@ -98,4 +100,4 @@ const styles = StyleSheet.create({
      },
 })
 
-export default LabelName
+export default LabelCard

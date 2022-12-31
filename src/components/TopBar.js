@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {
-  View,
+  SafeAreaView,
   Image,
   Text,
   Modal,
@@ -14,9 +14,10 @@ import Icon from 'react-native-vector-icons/Feather';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../navigation/AuthProvider';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
-const TopBar = ({menuPress, navigation}) => {
-
+const TopBar = ({menuPress}) => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const layout = useSelector((state)=> state.layout)
 
@@ -24,11 +25,11 @@ const TopBar = ({menuPress, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   console.log(user);
   return (
-    <View style={styles.view}>
+    <SafeAreaView style={styles.view}>
       <TouchableOpacity onPress={menuPress}>
         <Icon name="menu" style={styles.icon} size={20} color="white" />
       </TouchableOpacity>
-      <View style={styles.input}>
+      <SafeAreaView style={styles.input}>
         <TouchableOpacity onPress={() => navigation.navigate('SearchNotes')}>
           <Text style={{color: 'white'}}> Search Your Notes </Text>
 
@@ -38,7 +39,7 @@ const TopBar = ({menuPress, navigation}) => {
             placeholderTextColor={'white'}
           /> */}
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
 
       {/* <TouchableOpacity onPress={() => changeLayout()}> */}
       <TouchableOpacity onPress={() => dispatch({type: 'CHANGELAYOUT'})}>
@@ -52,7 +53,7 @@ const TopBar = ({menuPress, navigation}) => {
 
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         {/* <Icon name="user" style={styles.icon} size={20} color="white" /> */}
-        <View style={styles.photoURL}>
+        <SafeAreaView style={styles.photoURL}>
           {user.photoURL ? (
             <Image style={styles.image} source={{uri: user.photoURL}} />
           ) : (
@@ -61,7 +62,7 @@ const TopBar = ({menuPress, navigation}) => {
               S{/* {user.displayName.charAt(0)} */}
             </Text>
           )}
-        </View>
+        </SafeAreaView>
       </TouchableOpacity>
 
       <Modal
@@ -71,8 +72,8 @@ const TopBar = ({menuPress, navigation}) => {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        <View style={styles.modalcontainer}>
-          <View style={styles.modalbackground}>
+        <SafeAreaView style={styles.modalcontainer}>
+          <SafeAreaView style={styles.modalbackground}>
             <Image style={styles.modalimage} source={{uri: user.photoURL}} />
             <Text style={styles.email}> {user.email} </Text>
             <Pressable
@@ -80,10 +81,10 @@ const TopBar = ({menuPress, navigation}) => {
               onPress={() => logout()}>
               <Text style={styles.text}>Logout</Text>
             </Pressable>
-          </View>
-        </View>
+          </SafeAreaView>
+        </SafeAreaView>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

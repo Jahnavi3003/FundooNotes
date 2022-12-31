@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
-  View,
+  SafeAreaView,
   Text,
+  View,
   StyleSheet,
   TouchableOpacity,
   TextInput,
@@ -9,22 +10,26 @@ import {
 } from 'react-native';
 import {COLOR} from '../utility/Theme';
 import Icon from 'react-native-vector-icons/Ionicons'
-import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons'
 import { fetchLabel } from '../services/FirebaseLabelServices';
 import { useUid } from '../hooks/useUid';
-import LabelName from '../components/LabelName';
+import Labels from '../components/Labels';
+import { useSelector, useDispatch } from 'react-redux';
 
-const LabelInModal = ({navigation,item}) => {
+const LabelInModal = ({navigation,route}) => {
     
-    const [labelName, setLabelName] = useState(item.labelName)
-    const [labelData, setLabelData] = useState([]);
-    const [checkBox, setCheckBox] = useState(true)
+    const [value, setValue] = useState('');
+    const [selection,setSelection] = useState([]);
+ //   const [labelData, setLabelData] = useState([]);
     const uid = useUid();
-  
-    const getData = async () => {
+    const noteData = route.params?.noteData;
+    const dispatch= useDispatch();
+    const labels = useSelector((state) => state.labels);
+
+    const getData = useCallback (async () => {
       let result = await fetchLabel(uid);
-      setLabelData(result);
-    };
+      dispatch({type: 'GETLABELDATA', payload: result});
+     // setLabelData(result);
+    }, []);
   
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
@@ -33,37 +38,45 @@ const LabelInModal = ({navigation,item}) => {
       return unsubscribe;
     }, []);
 
-   const onBoxPress = () => {
-     setCheckBox(false)
+   const onCheck = (item) => {
+    const index = selection.findIndex(labels => labels.labelNameid === item.labelNameid);
+    if (index === -1)
+    setSelection([...selection,item]);
+    else {
+      const selected = [...selection];
+      selected.splice(index, 1);
+      setSelection(selected);
+    }
+     
    }
   return (
-   <View style={styles.view}>
-     <View style={styles.top}>
+   <SafeAreaView style={styles.view}>
+     <SafeAreaView style={styles.top}>
       <TouchableOpacity
         style={styles.icon}
-        onPress={() => navigation.goBack()}>
+        onPress={() => navigation.navigate('AddNewNote', {labels: selection,noteData})}>
         <Icon name="arrow-back" size={20} color="white" />
       </TouchableOpacity>
-       <TextInput style={styles.text}
+       <TextInput style={styles.input}
          placeholder= "Enter label name"
-         value={labelName}
-         onChangeText={text =>setLabelName(text)}
+         value={value}
+         onChangeText={text =>setValue(text)}
          placeholderTextColor={'white'}
        />
-     </View>
-      <View style={styles.label}>
-        <TouchableOpacity onPress={() =>onBoxPress()}>
-        <Icon1 size={20} 
-         name= "label-outline" 
-         style={styles.icon1} color="white" />
-         </TouchableOpacity>
-         <Text style={styles.text1}>{labelName}</Text>
-        <TouchableOpacity onPress={() =>onBoxPress()}>
-        <Icon1 size={20} 
-        name= {checkBox? "checkbox-blank-outline" : "checkbox-marked"} style={styles.icon2} color="white" />
-        </TouchableOpacity>
-        </View>
-   </View>
+     </SafeAreaView>
+         
+         <View>
+         {labels.map(item => (
+          <Labels
+          key={item.labelNameid}
+          data={item}
+          onCheck={onCheck}
+          selection={selection}/>    
+         ))}
+       </View> 
+       
+
+   </SafeAreaView>
   )
 }
 
@@ -82,22 +95,23 @@ const styles = StyleSheet.create({
     },
     label: {
       flexDirection:'row',
-      alignContent:'space-between',
-      alignItems:'center',
-    },
-    text: {
-      color: 'white',
-      marginRight: 280,
+      marginTop: 10,
+      alignContent: 'flex-start',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+     
     },
     text1: {
-      width:290,
-      color:'white'
+      width:100,
+      color:'white',
+      marginRight: 180,
+      marginTop:15,
      },
     input: {
       width: 200,
       height: 45,
       backgroundColor: COLOR.BACKGROUND_COLOR_DG,
-      marginRight: 80,
+      marginRight: 280,
       color: 'white',
     },
     icon: {
@@ -107,16 +121,9 @@ const styles = StyleSheet.create({
         paddingVertical: 9,
       },
     icon1: {
-        margin: 7,
-        padding: 5,
-        paddingHorizontal: 15,
-        paddingVertical: 5,
-        color:"white"
-  },
-    icon2: {
         color:"white",
-        alignItems:'flex-end',
-        alignContent:'flex-end',
+        marginRight:20,
+        marginTop:10
   },
 })
 

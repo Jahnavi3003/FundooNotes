@@ -4,10 +4,12 @@ const db = firestore().collection('UserData');
 export const addLabel = async (
     labelName,
     uid,
+    noteData,
   ) => {
     try {
       await db.doc(uid).collection('LabelData').add({
-        labelName:labelName
+        labelName:labelName,
+        noteData: noteData
       });
       
     } catch (error) {
@@ -24,13 +26,12 @@ export const addLabel = async (
         .get()
         .then(data => {
           data.forEach(labelName => {
-  
+            console.log('########',labelName);
             const docData = labelName.data();
             docData.labelNameid = labelName.id;
             info.push(docData);
           });
         });
-        console.log('^^^^^^^',info)
       return info;
     } catch (error) {
       console.log(error);
@@ -57,3 +58,22 @@ export const addLabel = async (
       console.log(error);
     }
   };
+
+  export const deleteLabel = async (
+    uid,
+    labelNameid
+  ) => {
+    try {
+      await db
+        .doc(uid)
+        .collection('LabelData')
+        .doc(labelNameid)
+        .delete()
+        .then(() => {
+          console.log('Label Deleted');
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+

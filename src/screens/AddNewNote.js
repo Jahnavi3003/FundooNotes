@@ -1,13 +1,17 @@
-import React, {useContext, useState} from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import React, {useContext, useEffect,useState} from 'react';
+import {SafeAreaView, View, Text, TextInput, StyleSheet} from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {addNote, deleteNote} from '../services/FirebaseNoteServices';
 import {updateNote} from '../services/FirebaseNoteServices';
 import NotesBottomBar from '../components/NotesBottomBar';
 import NotesTopBar from '../components/NotesTopBar';
+import {Chip} from 'react-native-paper';
+import { fetchLabel } from '../services/FirebaseLabelServices';
+
 
 const AddNewNote = ({navigation, route}) => {
-  const noteData = route.params;
+  const noteData = route.params?.noteData;
+  
   const [pinData, setPinData] = useState(noteData?.pinData || false);
   const [archiveData, setArchiveData] = useState(
     noteData?.archiveData || false,
@@ -16,10 +20,13 @@ const AddNewNote = ({navigation, route}) => {
   const [title, setTitle] = useState(noteData?.title || '');
   const [note, setNote] = useState(noteData?.note || '');
 
+  const labelData= (route.params?.labelData|| []);
+
+   console.log('$$$$$$$$',noteData);
   const {user} = useContext(AuthContext);
   const onBackPress = async () => {
     let userId = user.uid;
-    if (noteData.noteid) {
+    if (noteData?.noteid) {
       await updateNote(
         title,
         note,
@@ -28,13 +35,15 @@ const AddNewNote = ({navigation, route}) => {
         pinData,
         archiveData,
         deleteData,
+        labelData,
       );
     } else {
-      await addNote(title, note, userId, pinData, archiveData, deleteData);
+      await addNote(title, note, userId, pinData, archiveData, deleteData, labelData);
     }
+    
     navigation.goBack();
   };
-
+ 
   const onPinHandle = () => {
     setPinData(!pinData);
   };
@@ -57,8 +66,20 @@ const AddNewNote = ({navigation, route}) => {
     );
   };
 
+  const getData = async () => {
+    let userId = user.uid;
+
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getData();
+    });
+    return unsubscribe;
+  }, []);
+
   return (
-    <View style={styles.view}>
+    <SafeAreaView style={styles.view}>
       <View>
         <NotesTopBar
           onBackPress={onBackPress}
@@ -86,13 +107,17 @@ const AddNewNote = ({navigation, route}) => {
             onChangeText={newNote => setNote(newNote)}
             multiline={true}
             defaultValue={note}
-          />
+          />  
+
+        <View style={{flexDirection:'row'}}>
+        {labelData.map(label=> <Chip style={styles.chip} key={label.labelNameid}>{label.labelName}</Chip>)}
         </View>
-      </View>
-      <View>
-        <NotesBottomBar deleteData={deleteData} setDeleteData={setDeleteData} navigation={navigation} />
-      </View>
-    </View>
+        </View>  
+        </View>
+      <SafeAreaView>
+        <NotesBottomBar noteData={noteData} deleteData={deleteData} setDeleteData={setDeleteData} navigation={navigation} />
+      </SafeAreaView>
+    </SafeAreaView>
   );
 };
 
@@ -116,5 +141,11 @@ const styles = StyleSheet.create({
     color: 'white',
     marginLeft: 8,
   },
+  chip: {
+    backgroundColor:'grey',
+    marginTop:50,
+    marginLeft:20,
+    width:90,
+  }
 });
 export default AddNewNote;

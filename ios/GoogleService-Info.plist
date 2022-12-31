@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>392866249183-8leqit6s02mi4tal7m6tks4h77dc280n.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.392866249183-8leqit6s02mi4tal7m6tks4h77dc280n</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>392866249183-11ufvpo4hfju2reio0flut68b9eima5t.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAZBSSbKWfhLy4q3TOzXId7j0eNgkyNgvQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>392866249183</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.FundooNotes</string>
+	<key>PROJECT_ID</key>
+	<string>fundoo-notes-2b0f1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fundoo-notes-2b0f1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:392866249183:ios:ae27a9165dffc0c5aaec6a</string>
+</dict>
+</plist>

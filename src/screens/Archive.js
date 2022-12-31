@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {SafeAreaView, View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import ArchiveTopBar from '../components/ArchiveTopBar';
 import NoteCard from '../components/NoteCard';
 import {AuthContext} from '../navigation/AuthProvider';
@@ -33,7 +33,7 @@ const Archive = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.view}>
+    <SafeAreaView style={styles.view}>
       <ArchiveTopBar
         menuPress={() => {
           navigation.openDrawer();
@@ -52,7 +52,7 @@ const Archive = ({navigation}) => {
           key={layout ? 2 : 1}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

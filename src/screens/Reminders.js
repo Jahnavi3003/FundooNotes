@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {SafeAreaView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import ReminderTopBar from '../components/ReminderTopBar';
+import BottomBar from '../components/BottomBar'
 import {COLOR} from '../utility/Theme';
 const Reminders = ({navigation}) => {
   const [layout, setLayout] = useState(false);
@@ -9,7 +10,7 @@ const Reminders = ({navigation}) => {
   };
 
   return (
-    <View style={styles.view}>
+    <SafeAreaView style={styles.view}>
       <ReminderTopBar
         menuPress={() => {
           navigation.openDrawer();
@@ -17,8 +18,10 @@ const Reminders = ({navigation}) => {
         changeLayout={changeLayout}
         layout={layout}
       />
-      <Text>Reminders</Text>
-    </View>
+       <SafeAreaView style={{justifyContent: 'flex-end'}}>
+        <BottomBar navigation={navigation} />
+       </SafeAreaView>
+    </SafeAreaView>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {
   Text,
-  View,
+  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   SectionList,
@@ -46,7 +46,7 @@ const Home = ({navigation}) => {
       getData();
     });
     return unsubscribe;
-  }, []);
+  }, [navigation]);
 
 
   const sections = [
@@ -62,9 +62,9 @@ const Home = ({navigation}) => {
         scrollEnabled={false}
         data={item.list}
         renderItem={({item, index}) => (
-          <TouchableOpacity key={index}
+          <TouchableOpacity 
             style={layout ? styles.grid : styles.list}
-            onPress={() => navigation.navigate('AddNewNote', {...item})}>
+            onPress={() => navigation.navigate('AddNewNote', {noteData: item})}>
             <NoteCard {...item} layout={layout} />
           </TouchableOpacity>
         )}
@@ -85,8 +85,8 @@ const Home = ({navigation}) => {
   };
 
   return (
-    <View style={styles.view}>
-      <View style={{marginBottom: 15}}>
+    <SafeAreaView style={styles.view}>
+      <SafeAreaView style={{marginBottom: 15}}>
         
         <TopBar
           menuPress={() => {
@@ -95,7 +95,7 @@ const Home = ({navigation}) => {
           navigation={navigation}
         />
        
-      </View>
+      </SafeAreaView>
 
       <SectionList
         style={{flex: 1}}
@@ -144,10 +144,10 @@ const Home = ({navigation}) => {
         <Text> </Text>
       </ScrollView> */}
 
-      <View style={{justifyContent: 'flex-end'}}>
+      <SafeAreaView style={{justifyContent: 'flex-end'}}>
         <BottomBar navigation={navigation} />
-      </View>
-    </View>
+      </SafeAreaView>
+    </SafeAreaView>
   );
 };
 

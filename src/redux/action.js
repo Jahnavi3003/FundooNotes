@@ -4,4 +4,9 @@ export const changeLayout = () => {
     };
   };
 
-  
+export const getLabelData = (labels) => {
+    return {
+      type: 'GETLABELDATA',
+      payload: labels
+    };
+};

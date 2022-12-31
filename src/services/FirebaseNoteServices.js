@@ -10,6 +10,7 @@ export const addNote = async (
   pinData,
   archiveData,
   deleteData,
+  labelData,
 ) => {
   try {
     await db.doc(userId).collection('NoteData').add({
@@ -18,6 +19,7 @@ export const addNote = async (
       pinData: pinData,
       archiveData: archiveData,
       deleteData: deleteData,
+      labelData: labelData,
     });
     console.log('Hello');
   } catch (error) {
@@ -54,8 +56,10 @@ export const updateNote = async (
   pinData,
   archiveData,
   deleteData,
+  labelData,
 ) => {
   try {
+    console.log('noteiddddddd',noteid);
     await db
       .doc(userId)
       .collection('NoteData')
@@ -66,6 +70,7 @@ export const updateNote = async (
         pinData: pinData,
         archiveData: archiveData,
         deleteData: deleteData,
+        labelData: labelData,
       })
       .then(() => {
         console.log('Updated');

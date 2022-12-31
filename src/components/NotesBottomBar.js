@@ -15,7 +15,7 @@ import {deleteNote} from '../services/FirebaseNoteServices';
 import {COLOR} from '../utility/Theme';
 import {useTime} from '../hooks/useTime';
 
-const NotesBottomBar = ({navigation, deleteData, setDeleteData}) => {
+const NotesBottomBar = ({navigation, noteData, setDeleteData}) => {
   const time = useTime();
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -69,7 +69,10 @@ const NotesBottomBar = ({navigation, deleteData, setDeleteData}) => {
                 <Text style={styles.text1}> Send </Text>
               </Icon>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('LabelInModal')}>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate('LabelInModal',{noteData});
+              setModalVisible(!modalVisible);
+              }}>
               <Icon3
                 style={styles.icons}
                 name="label-outline"
